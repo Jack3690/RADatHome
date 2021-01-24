@@ -1,0 +1,6 @@
+voila
+matplotlib
+numpy
+astropy
+astroquery
+ipywidgets

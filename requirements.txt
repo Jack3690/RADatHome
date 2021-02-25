@@ -4,6 +4,3 @@ numpy
 astropy
 astroquery
 ipywidgets
-torch
-torchvision
-torchaudio

@@ -97,7 +97,7 @@ class RGB(object):
         return fig,ax
     
     def make_dataset(self):
-        if self.paths[5][0]!=0 and self.paths[6][0]!=0
+        if self.paths[5][0]!=0 and self.paths[6][0]!=0:
             image = self.RGB_image[self.img_dict['IOU']]
             image = np.stack((image[0],image[1],image[2]),axis=2)
 

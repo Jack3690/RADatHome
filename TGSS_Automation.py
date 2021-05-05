@@ -163,18 +163,4 @@ class RGB(object):
             contour.append(img)
         contour = np.array(contour)
         
-        return RGB_all, contour, paths
-            
-surveys = ['DSS2 IR', 'DSS2 Red','DSS2 Blue']
-
-TGSS = source_extract("R23D20_5x5.fits")
-
-positions = TGSS.get_positions()
-
-for position in positions:
-    fig,ax=RGB(position,0.2).make_dataset()
-    plt.axis('off')
-    fig.savefig(f'TGSS/{position}.png')
-    
-    
-
+        return RGB_all, contour, paths 

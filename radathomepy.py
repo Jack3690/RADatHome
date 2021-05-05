@@ -92,6 +92,8 @@ class RGB(object):
             ax.contour(contour, transform=ax.get_transform(cont_wcs), colors='white',levels=levels_c)
 
             ax.set_title(f'{survey} RGB with {cont} contours')
+        except:
+            ax.set_title(f'{cont} data not found')
         return fig,ax
     
     def make_dataset(self):

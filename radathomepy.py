@@ -64,7 +64,8 @@ class RGB(object):
         self.levels = 4
         
     def make_RGB(self,survey ='Optical',cont='TGSS'):
-
+        
+        
         image = self.RGB_image[self.img_dict[survey]]
         image = np.stack((image[0],image[1],image[2]),axis=2)
         
@@ -77,47 +78,52 @@ class RGB(object):
             c=6
             cont_min = 0.0015
         
-        img_wcs= WCS(self.paths[self.img_dict[survey][0]][0].header)
-        cont_wcs = WCS(self.paths[c][0].header)
+        img_wcs = WCS(self.paths[self.img_dict[survey][0]][0].header) or None
+     
+        cont_wcs = WCS(self.paths[c][0].header) or None
         
         fig = plt.figure(figsize = (10,10))
-        ax=fig.add_subplot(projection = img_wcs)
-        ax.imshow(image)
-        ax.set_autoscale_on(False)
- 
-        levels_c=np.arange(cont_min,contour.max(),(contour.max()-cont_min)/self.levels)
-        ax.contour(contour, transform=ax.get_transform(cont_wcs), colors='white',levels=levels_c)
-        
-        ax.set_title(f'{survey} RGB with {cont} contours')
- 
+        ax = fig.add_subplot(projection = img_wcs)
+        try:
+            ax.imshow(image)
+            ax.set_autoscale_on(False)
+
+            levels_c=np.arange(cont_min,contour.max(),(contour.max()-cont_min)/self.levels)
+            ax.contour(contour, transform=ax.get_transform(cont_wcs), colors='white',levels=levels_c)
+
+            ax.set_title(f'{survey} RGB with {cont} contours')
         return fig,ax
     
     def make_dataset(self):
-        image = self.RGB_image[self.img_dict['IOU']]
-        image = np.stack((image[0],image[1],image[2]),axis=2)
+        if self.paths[5][0]!=0 and self.paths[6][0]!=0
+            image = self.RGB_image[self.img_dict['IOU']]
+            image = np.stack((image[0],image[1],image[2]),axis=2)
+
+            img_wcs= WCS(self.paths[self.img_dict['IOU'][0]][0].header)
+
+            cont_TGSS = self.contours[0]
+            cont_wcs_TGSS = WCS(self.paths[5][0].header)
+
+            cont_NVSS = self.contours[1]
+            cont_wcs_NVSS = WCS(self.paths[6][0].header)
+
+            fig = plt.figure(figsize = (10,10))
+            ax=fig.add_subplot(projection = img_wcs)
+            ax.imshow(image)
+            ax.set_autoscale_on(False)
+
+            levels_c=np.arange(0.015,cont_TGSS.max(),(cont_TGSS.max()-0.015)/self.levels)
+            ax.contour(cont_TGSS, transform=ax.get_transform(cont_wcs_TGSS), colors='red',levels=levels_c)
+
+            levels_c=np.arange(0.0015,cont_NVSS.max(),(cont_NVSS.max()-0.0015)/self.levels)
+            ax.contour(cont_NVSS, transform=ax.get_transform(cont_wcs_NVSS), colors='blue',levels=levels_c)
+
+            ax.set_title("IOU RGB with contours | TGSS : Red, NVSS : Blue")
         
-        img_wcs= WCS(self.paths[self.img_dict['IOU'][0]][0].header)
-        
-        cont_TGSS = self.contours[0]
-        cont_wcs_TGSS = WCS(self.paths[5][0].header)
-        
-        cont_NVSS = self.contours[1]
-        cont_wcs_NVSS = WCS(self.paths[6][0].header)
-        
-        fig = plt.figure(figsize = (10,10))
-        ax=fig.add_subplot(projection = img_wcs)
-        ax.imshow(image)
-        ax.set_autoscale_on(False)
- 
-        levels_c=np.arange(0.015,cont_TGSS.max(),(cont_TGSS.max()-0.015)/self.levels)
-        ax.contour(cont_TGSS, transform=ax.get_transform(cont_wcs_TGSS), colors='red',levels=levels_c)
-        
-        levels_c=np.arange(0.0015,cont_NVSS.max(),(cont_NVSS.max()-0.0015)/self.levels)
-        ax.contour(cont_NVSS, transform=ax.get_transform(cont_wcs_NVSS), colors='blue',levels=levels_c)
-        
-        ax.set_title("IOU RGB with contours | TGSS : Red, NVSS : Blue")
-        
-        return fig,ax
+            return fig,ax
+        else :
+            print('Data not available')
+            return None
 
     def RAD_RGB(self):
         try:
@@ -137,6 +143,7 @@ class RGB(object):
                 try:
                     path = SkyView.get_images(position=self.position,pixels=600,scaling="Sqrt",sampler='Lanczos3',radius=self.radius*u.degree,survey=self.surveys[i])
                     paths_r.append(path[0])
+                  
                 except:
                     print(f"Data not found for {self.surveys[i]}")
                     paths_r.append([0])

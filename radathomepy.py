@@ -159,8 +159,11 @@ class RGB(object):
      
         contour=[]
         for path in paths_r:
-            img=path[0].data.copy()
-            contour.append(img)
+            if path[0]==0:
+                contour.append(np.zeros((600,600)))
+            else:
+                img=path[0].data.copy()
+                contour.append(img)
         contour = np.array(contour)
         
         return RGB_all, contour, paths 
